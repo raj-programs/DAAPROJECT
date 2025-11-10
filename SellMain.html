@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sell Your Vintage Parts</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffedd5, #fed7aa, #fdba74);
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(to right, #d97706, #ea580c);
+    color: white;
+    padding: 20px 30px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 26px;
+  }
+  p {
+    margin: 5px 0 0;
+    color: #ffedd5;
+  }
+  .section {
+    padding: 25px 30px;
+    border-bottom: 1px solid #f3f3f3;
+  }
+  label {
+    display:block;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 5px;
+  }
+  button {
+    background: linear-gradient(to right, #d97706, #ea580c);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  button:hover { opacity: 0.9; }
+  .status {
+    margin-top: 15px;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Sell Your Vintage Parts</h1>
+    <p>List your authentic vintage car parts with us</p>
+  </div>
+  <div class="section">
+    <h2>Seller Information</h2>
+    <label>Name</label>
+    <input type="text" id="name" placeholder="John Doe">
+    <label>Phone</label>
+    <input type="text" id="phone" placeholder="+91 98765 43210">
+    <label>Address</label>
+    <textarea id="address" rows="2" placeholder="Street, City, State, PIN"></textarea>
+  </div>
+  <div class="section">
+    <h2>Part Information</h2>
+    <label>Master Category</label>
+    <select id="masterCategory"></select>
+    <label>Category</label>
+    <select id="category"></select>
+    <label>Part Name</label>
+    <select id="partName"></select>
+    <label>Description</label>
+    <textarea id="description" rows="3" placeholder="Describe the part condition and model..."></textarea>
+  </div>
+  <div class="section">
+    <h2>Media Uploads</h2>
+    <label>Images</label>
+    <input type="file" id="images" multiple accept="image/*">
+    <label>Video</label>
+    <input type="file" id="video" accept="video/*">
+  </div>
+  <div class="section">
+    <button id="submitBtn">Submit & Save Locally</button>
+    <p class="status" id="status"></p>
+  </div>
+</div>
+
+<script>
+const partsData = {
+  "Exterior Parts": {
+    "Body & Structure": ["Body shell / chassis","Fenders / wings","Running boards","Doors","Hood / bonnet","Trunk / boot lid","Roof / convertible top"],
+    "Lighting & Signals": ["Headlights","Taillights","Turn signal indicators","Fog lights / auxiliary lamps","License plate lights"],
+    "Chrome & Trim": ["Bumpers","Grille","Emblems / badges","Chrome moldings","Mirrors"],
+    "Wheels & Undercarriage": ["Rims / hubcaps","Whitewall tires","Wheel arches","Mud flaps"],
+    "Glass & Openings": ["Windshield / windscreen","Side windows","Rear window","Vent windows"],
+    "Accessories & Extras": ["Hood ornament / mascot","Spare tire cover","Fuel cap","Antenna","License plate holder","Door handles & locks"]
+  },
+  "Interior Parts": {
+    "Seats & Upholstery": ["Seat Frames","Seat Foam","Leather/Vinyl Covers","Seat Adjuster Rails"],
+    "Door Panels": ["Armrests","Window Cranks","Door Handles","Trim Moldings"],
+    "Dashboard & Controls": ["Instrument Cluster","Switch Knobs","Glove Box","Dash Bezels"],
+    "Steering Assembly": ["Steering Wheel","Horn Ring","Turn Signal Lever","Steering Column Cover"],
+    "Floor & Carpeting": ["Carpet Set","Floor Mats","Pedal Pads","Insulation Pads"],
+    "Roof & Headliner": ["Headliner Fabric","Sun Visors","Dome Light Housing","Roof Insulation Pad"],
+    "Interior Accessories": ["Rearview Mirror","Dashboard Clock","Ashtray","Radio Unit"]
+  },
+  "Electrical Parts": {
+    "Power Supply & Charging": ["Battery","Alternator / Generator","Voltage Regulator","Fuse Box","Wiring Harness","Electrical Connectors"],
+    "Ignition System": ["Ignition Coil","Spark Plugs","Distributor","Ignition Switch","Ignition Control Module","Choke Heater / Electric Choke"],
+    "Lighting System": ["Headlights","Tail Lights / Brake Lights","Turn Signal Lights","Interior / Dome Lights","Brake Light Switch","Turn Signal Flasher Unit","Light Switches","Horn","Horn Relay"],
+    "Dashboard & Instrumentation": ["Dashboard Instruments","Fuel Gauge Sender","Oil Pressure Sensor","Temperature Sensor","Clock / Timer"],
+    "Switches, Relays & Sensors": ["Relays","Accessory Relay","Clutch / Gear Position Switch","Cigarette Lighter Fuse"],
+    "Accessories & Miscellaneous": ["Windshield Wiper Motor","Heater Fan Motor","Cigarette Lighter / Accessory Socket","Radio / Audio System"]
+  },
+  "Engine Parts": {
+    "Engine Block Assembly": ["Engine Block","Cylinder Liners","Crankcase"],
+    "Piston & Connecting Rod System": ["Piston","Piston Rings","Connecting Rod","Wrist Pin"],
+    "Crankshaft & Flywheel Assembly": ["Crankshaft","Main Bearings","Flywheel","Thrust Washers"],
+    "Cylinder Head & Valve Mechanism": ["Cylinder Head","Valves","Valve Springs","Rocker Arms"],
+    "Camshaft & Timing Mechanism": ["Camshaft","Timing Chain","Timing Gears","Lifters (Tappets)"],
+    "Fuel & Air Intake System": ["Carburetor","Intake Manifold","Fuel Pump","Air Filter"],
+    "Lubrication & Cooling System": ["Oil Pump","Oil Filter","Water Pump","Radiator"],
+    "Exhaust & Gasket Assembly": ["Exhaust Manifold","Muffler","Head Gasket","Seals & O-Rings"]
+  }
+};
+
+const masterCategory = document.getElementById('masterCategory');
+const category = document.getElementById('category');
+const partName = document.getElementById('partName');
+const statusEl = document.getElementById('status');
+
+Object.keys(partsData).forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat; opt.textContent = cat;
+  masterCategory.appendChild(opt);
+});
+
+masterCategory.addEventListener('change', () => {
+  category.innerHTML = ''; partName.innerHTML = '';
+  const selected = partsData[masterCategory.value];
+  Object.keys(selected).forEach(sub => {
+    const opt = document.createElement('option');
+    opt.value = sub; opt.textContent = sub;
+    category.appendChild(opt);
+  });
+});
+
+category.addEventListener('change', () => {
+  partName.innerHTML = '';
+  const selectedParts = partsData[masterCategory.value][category.value];
+  selectedParts.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    partName.appendChild(opt);
+  });
+});
+
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  try {
+    const dirHandle = await window.showDirectoryPicker();
+    const submissionsDir = await dirHandle.getDirectoryHandle('Submissions', { create: true });
+
+    // Count existing submissions
+    let count = 1;
+    for await (const entry of submissionsDir.values()) {
+      if (entry.kind === 'directory' && entry.name.startsWith('submission_')) count++;
+    }
+    const submissionDir = await submissionsDir.getDirectoryHandle(`submission_${count}`, { create: true });
+
+    const infoFile = await submissionDir.getFileHandle('info.txt', { create: true });
+    const writable = await infoFile.createWritable();
+    const data = `Name: ${name.value}
+Phone: ${phone.value}
+Address: ${address.value}
+Master Category: ${masterCategory.value}
+Category: ${category.value}
+Part Name: ${partName.value}
+Description: ${description.value}
+Date: ${new Date().toLocaleString()}`;
+    await writable.write(data);
+    await writable.close();
+
+    // Save images
+    for (let img of images.files) {
+      const fileHandle = await submissionDir.getFileHandle(img.name, { create: true });
+      const writableImg = await fileHandle.createWritable();
+      await writableImg.write(await img.arrayBuffer());
+      await writableImg.close();
+    }
+
+    // Save video
+    const vid = video.files[0];
+    if (vid) {
+      const fileHandle = await submissionDir.getFileHandle(vid.name, { create: true });
+      const writableVid = await fileHandle.createWritable();
+      await writableVid.write(await vid.arrayBuffer());
+      await writableVid.close();
+    }
+
+    statusEl.textContent = `✅ Submission saved as submission_${count}`;
+    statusEl.style.color = 'green';
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = '❌ Failed to save submission. Please try again.';
+    statusEl.style.color = 'red';
+  }
+});
+</script>
+</body>
+</html>
