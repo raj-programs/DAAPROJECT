@@ -35,12 +35,60 @@
             `).join('');
         }
 
-        function filterProducts(category) {
-            currentFilter = category;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderProducts();
-        }
+       function filterProducts(type) {
+    if (!window.hierarchy) return;
+
+    switch (type) {
+        case 'all':
+            showAll(); // shows all major master categories (Engine, Exterior, etc.)
+            break;
+
+        case 'exterior':
+            if (window.hierarchy['Exterior']) {
+                showMasterCategory('Exterior');
+            } else if (window.hierarchy['Exterior Parts']) {
+                showMasterCategory('Exterior Parts');
+            } else {
+                alert("No Exterior parts available");
+            }
+            break;
+
+        case 'engine':
+            if (window.hierarchy['Engine']) {
+                showMasterCategory('Engine');
+            } else if (window.hierarchy['Engine Parts']) {
+                showMasterCategory('Engine Parts');
+            } else {
+                alert("No Engine parts available");
+            }
+            break;
+
+        case 'interior':
+            if (window.hierarchy['Interior']) {
+                showMasterCategory('Interior');
+            } else if (window.hierarchy['Interior Parts']) {
+                showMasterCategory('Interior Parts');
+            } else {
+                alert("No Interior parts available");
+            }
+            break;
+
+        case 'electrical':
+            if (window.hierarchy['Electrical']) {
+                showMasterCategory('Electrical');
+            } else if (window.hierarchy['Electrical Parts']) {
+                showMasterCategory('Electrical Parts');
+            } else {
+                alert("No Electrical parts available");
+            }
+            break;
+
+        default:
+            showAll();
+            break;
+    }
+}
+
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);

@@ -7,40 +7,133 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo">⚙️ Classic Motors</div>
-            <div class="cart-icon" onclick="toggleCart()">
-                🛒 Cart <span class="cart-count" id="cartCount">0</span>
-            </div>
-        </div>
-    </header>
-
-    <div class="hero">
-        <h1>Authentic Vintage Car Parts</h1>
-        <p>Restore Your Classic with Premium Quality Parts</p>
-    </div>
-
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterProducts('all')">All Parts</button>
-        <button class="filter-btn" onclick="filterProducts('engine')">Engine</button>
-        <button class="filter-btn" onclick="filterProducts('exterior')">Exterior</button>
-        <button class="filter-btn" onclick="filterProducts('interior')">Interior</button>
-        <button class="filter-btn" onclick="filterProducts('electrical')">Electrical</button>
-    </div>
-
-    <div class="products" id="productsGrid"></div>
-
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Your Cart</h2>
-                <button class="close-cart" onclick="toggleCart()">Close</button>
-            </div>
-            <div id="cartItems"></div>
+<header>
+    <div class="header-content">
+        <div class="logo">⚙️ Classic Motors</div>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 Cart <span class="cart-count" id="cartCount">0</span>
         </div>
     </div>
+</header>
 
-    <script src="script.js"></script>
+<div class="hero">
+    <h1>Authentic Vintage Car Parts</h1>
+    <p>Restore Your Classic with Premium Quality Parts</p>
+</div>
+
+<!-- Navigation Buttons -->
+<button class="filter-btn active" onclick="showAll()">All Parts</button>
+<button class="filter-btn" id="engineBtn" onclick="showMasterCategory('Engine Parts')">Engine</button>
+<button class="filter-btn" id="exteriorBtn" onclick="showMasterCategory('Exterior Parts')">Exterior</button>
+<button class="filter-btn" id="interiorBtn" onclick="showMasterCategory('Interior Parts')">Interior</button>
+<button class="filter-btn" id="electricalBtn" onclick="showMasterCategory('Electrical Parts')">Electrical</button>
+
+<div class="products" id="container"></div>
+
+<div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">Close</button>
+        </div>
+        <div id="cartItems"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<script>
+let hierarchy = {};
+let currentMaster = null;
+
+// Load CSV and organize into { Master Category → { Category → [parts] } }
+fetch('car-parts.csv')
+.then(response => response.text())
+.then(csvText => {
+    const data = Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
+
+    data.forEach(row => {
+        const master = row['Master Category'];
+        const category = row['Category'];
+        if (!hierarchy[master]) hierarchy[master] = {};
+        if (!hierarchy[master][category]) hierarchy[master][category] = [];
+        hierarchy[master][category].push({ part: row['Part'], description: row['Description'] });
+    });
+
+    // Load default view (e.g. Engine)
+    showMasterCategory('Engine');
+});
+
+// Show all master categories (if ever needed)
+function showAll() {
+    const container = document.getElementById('container');
+    container.innerHTML = '<h2>All Major Categories</h2>';
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'cards-container';
+
+    Object.keys(hierarchy).forEach(master => {
+        const card = document.createElement('div');
+        card.className = 'nav-card';
+        card.textContent = master;
+        card.onclick = () => showMasterCategory(master);
+        cardsContainer.appendChild(card);
+    });
+
+    container.appendChild(cardsContainer);
+}
+
+// Show all subcategories within a master category (e.g., "Exterior")
+function showMasterCategory(master) {
+    const container = document.getElementById('container');
+    currentMaster = master;
+
+    if (!hierarchy[master]) {
+        container.innerHTML = `<h2>No data available for ${master}</h2>`;
+        return;
+    }
+
+    container.innerHTML = `<h2>${master} Categories</h2>`;
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'cards-container';
+
+    Object.keys(hierarchy[master]).forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'nav-card';
+        card.textContent = cat;
+        card.onclick = () => showParts(master, cat);
+        cardsContainer.appendChild(card);
+    });
+
+    container.appendChild(cardsContainer);
+}
+
+// Show all parts in a specific subcategory
+function showParts(master, category) {
+    const container = document.getElementById('container');
+    container.innerHTML = `<h2>${category}</h2>`;
+
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'cards-container';
+
+    hierarchy[master][category].forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'part-card';
+        card.innerHTML = `
+            <h4>${p.part}</h4>
+            <p>${p.description}</p>
+            <button onclick="addToCart('${p.part}')">Add to Cart</button>
+        `;
+        cardsContainer.appendChild(card);
+    });
+
+    container.appendChild(cardsContainer);
+
+    const backBtn = document.createElement('button');
+    backBtn.textContent = 'Back';
+    backBtn.className = 'back-btn';
+    backBtn.onclick = () => showMasterCategory(master);
+    container.appendChild(backBtn);
+}
+</script>
 </body>
 </html>
