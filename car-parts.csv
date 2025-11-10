@@ -92,3 +92,34 @@ Electrical Parts,Accessories & Miscellaneous,Windshield Wiper Motor,Powers the w
 Electrical Parts,Accessories & Miscellaneous,Heater Fan Motor,Circulates warm air from the heater core.
 Electrical Parts,Accessories & Miscellaneous,Cigarette Lighter / Accessory Socket,Provides 12V power for accessories.
 Electrical Parts,Accessories & Miscellaneous,Radio / Audio System,Early AM/FM radios powered by the car battery.
+Engine,Engine Block Assembly,Engine Block,Main housing containing cylinders and crankcase for internal components.
+Engine,Engine Block Assembly,Cylinder Liners,Replaceable sleeves providing a smooth surface for piston movement.
+Engine,Engine Block Assembly,Crankcase,Lower part of the block holding crankshaft and lubricating oil.
+Engine,Piston & Connecting Rod System,Piston,Converts combustion pressure into mechanical force.
+Engine,Piston & Connecting Rod System,Piston Rings,Seal combustion chamber and control oil flow.
+Engine,Piston & Connecting Rod System,Connecting Rod,Links piston to crankshaft to transmit motion.
+Engine,Piston & Connecting Rod System,Wrist Pin,Joins piston and connecting rod allowing pivoting movement.
+Engine,Crankshaft & Flywheel Assembly,Crankshaft,Converts piston movement into rotational energy.
+Engine,Crankshaft & Flywheel Assembly,Main Bearings,Support crankshaft rotation inside the block.
+Engine,Crankshaft & Flywheel Assembly,Flywheel,Stores rotational energy and helps start the engine.
+Engine,Crankshaft & Flywheel Assembly,Thrust Washers,Control crankshaft end movement and wear.
+Engine,Cylinder Head & Valve Mechanism,Cylinder Head,Seals the top of cylinders and holds valve components.
+Engine,Cylinder Head & Valve Mechanism,Valves,Control intake of air-fuel and exhaust of gases.
+Engine,Cylinder Head & Valve Mechanism,Valve Springs,Return valves to closed position after operation.
+Engine,Cylinder Head & Valve Mechanism,Rocker Arms,Transmit camshaft motion to open valves.
+Engine,Camshaft & Timing Mechanism,Camshaft,Controls valve timing and sequence.
+Engine,Camshaft & Timing Mechanism,Timing Chain,Connects crankshaft and camshaft ensuring synchronized motion.
+Engine,Camshaft & Timing Mechanism,Timing Gears,Alternate gear-driven method to control valve timing.
+Engine,Camshaft & Timing Mechanism,Lifters (Tappets),Push rods up and down following camshaft lobes.
+Engine,Fuel & Air Intake System,Carburetor,Mixes air and fuel for combustion in proper ratio.
+Engine,Fuel & Air Intake System,Intake Manifold,Distributes air-fuel mixture to cylinders evenly.
+Engine,Fuel & Air Intake System,Fuel Pump,Delivers fuel from tank to carburetor.
+Engine,Fuel & Air Intake System,Air Filter,Removes dust and dirt before air enters carburetor.
+Engine,Lubrication & Cooling System,Oil Pump,Circulates oil through engine for lubrication.
+Engine,Lubrication & Cooling System,Oil Filter,Removes impurities from circulating oil.
+Engine,Lubrication & Cooling System,Water Pump,Drives coolant through the engine block and radiator.
+Engine,Lubrication & Cooling System,Radiator,Dissipates heat from the coolant to maintain temperature.
+Engine,Exhaust & Gasket Assembly,Exhaust Manifold,Collects exhaust gases and directs them out of cylinders.
+Engine,Exhaust & Gasket Assembly,Muffler,Reduces exhaust noise from the engine.
+Engine,Exhaust & Gasket Assembly,Head Gasket,Seals gap between engine block and cylinder head.
+Engine,Exhaust & Gasket Assembly,Seals & O-Rings,Prevent leakage of oil, coolant, and gases.
