@@ -2,20 +2,31 @@ let hierarchy = {};
 let currentMaster = null;
 
 // Load CSV and organize into { Master Category → { Category → [parts] } }
-fetch('car-parts.csv');
-const data = Papa.parse(csvData, { header: true, skipEmptyLines: true }).data;
+fetch('vintage_car_parts.csv')  // FIXED: Added back the .then() chain
+    .then(response => response.text())
+    .then(csvText => {
+        const data = Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
 
-data.forEach(row => {
-    const master = row['Master Category'];
-    const category = row['Category'];
-    if (!hierarchy[master]) hierarchy[master] = {};
-    if (!hierarchy[master][category]) hierarchy[master][category] = [];
-    hierarchy[master][category].push({
-        part: row['Part'],
-        description: row['Description'],
-        price: parseFloat(row['Price']) || 0
+        data.forEach(row => {
+            const master = row['Master Category'];
+            const category = row['Category'];
+            if (!hierarchy[master]) hierarchy[master] = {};
+            if (!hierarchy[master][category]) hierarchy[master][category] = [];
+            hierarchy[master][category].push({
+                part: row['Part'],
+                description: row['Description'],
+                price: parseFloat(row['Price']) || 0,
+                imageUrl: row['Link'] || ''  // ADDED: Image URL from CSV
+            });
+        });
+
+        // Default view after CSV is loaded
+        showAll();
+    })
+    .catch(error => {
+        console.error('Error loading CSV:', error);
+        document.getElementById('productsGrid').innerHTML = '<h2>Error loading product data</h2>';
     });
-});
 
 // Show all master categories
 function showAll() {
@@ -65,7 +76,7 @@ function showMasterCategory(master) {
     
     // Back button
     const backBtn = document.createElement('button');
-    backBtn.textContent = '← Back to All Categories';
+    backBtn.textContent = 'Back to All Categories';
     backBtn.className = 'back-btn';
     backBtn.onclick = showAll;
     container.appendChild(backBtn);
@@ -87,8 +98,14 @@ function showParts(master, category) {
     hierarchy[master][category].forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
+        
+        // FIXED: Added image support with fallback
+        const imageHtml = p.imageUrl 
+            ? `<img src="${p.imageUrl}" alt="${p.part}" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.outerHTML='<div class=\\'product-image\\'></div>'">` 
+            : '<div class="product-image"></div>';
+        
         card.innerHTML = `
-            <div class="product-image"></div>
+            ${imageHtml}
             <div class="product-info">
                 <div class="product-name">${p.part}</div>
                 <div class="product-description">${p.description}</div>
@@ -116,7 +133,7 @@ function showParts(master, category) {
 
     // Back button
     const backBtn = document.createElement('button');
-    backBtn.textContent = `← Back to ${master}`;
+    backBtn.textContent = `Back to ${master}`;
     backBtn.className = 'back-btn';
     backBtn.onclick = () => showMasterCategory(master);
     container.appendChild(backBtn);
