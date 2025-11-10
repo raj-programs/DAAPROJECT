@@ -29,7 +29,7 @@ function updateCart() {
     cartItems.innerHTML = cart.map((item, idx) => `
         <div class="cart-item">
             <div>${item.part} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</div>
-            <button class="checkout-btn" onclick="removeFromCart(${idx})">Remove</button>
+            <button onclick="removeFromCart(${idx})">Remove</button>
         </div>
     `).join('') + `
         <div class="cart-total"><strong>Total: $${total.toFixed(2)}</strong></div>
